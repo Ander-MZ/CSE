@@ -1,0 +1,4 @@
+class: edu.cmu.lti.qalab.annotators.TextSegmenter
+cross-opts:
+  EXAMPLE_1: [2,5]
+  EXAMPLE_2: [10]

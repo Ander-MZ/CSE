@@ -1,0 +1,4 @@
+class: edu.cmu.lti.qalab.annotators.StanfordSentenceAnnotator
+cross-opts:
+  EXAMPLE_1: [2]
+  EXAMPLE_2: [6, 10]

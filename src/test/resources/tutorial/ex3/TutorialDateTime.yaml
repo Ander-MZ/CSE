@@ -1,0 +1,3 @@
+class: uima.components.examples.ex3.TutorialDateTime
+params:
+  test: param1 

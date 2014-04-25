@@ -1,0 +1,2 @@
+class: uima.components.examples.ex4.MeetingAnnotator
+WindowSize: 200
