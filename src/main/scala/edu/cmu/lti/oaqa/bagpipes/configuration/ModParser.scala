@@ -82,7 +82,7 @@ abstract class ModParser(baseDir: Option[String] = None) {
       case true => getConfigurationMapFromPath(resource)
     }
     
-    println("\n\n----------Resources Map--------: \n\n" + resMap.toString)
+    //println("\n\n----------Resources Map--------: \n\n" + resMap.toString)
     
     parse(resMap)
   }
@@ -104,7 +104,7 @@ abstract class ModParser(baseDir: Option[String] = None) {
     //scala.Map->(flattened+converted to parameters)scala.Map
     val configMap = flattenConfMap(resMap)
     
-    println("\n\n----------Configuration Map--------: \n\n" + configMap.toString)
+    //println("\n\n----------Configuration Map--------: \n\n" + configMap.toString)
     
     extract[ConfigurationDescriptor](configMap)
     
@@ -202,11 +202,21 @@ abstract class ModParser(baseDir: Option[String] = None) {
     if (confMap.contains("collection-class")) extract[CollectionReaderDescriptor](confMap)
     else if (confMap.contains("cross-opts") && confMap.contains("evaluator"))
       extract[CrossEvaluatorDescriptor](confMap)
-    else if (confMap.contains("cross-opts"))
+    else if (confMap.contains("cross-opts")){
+    	//We call our method here
+      calculateConfigs(confMap)
       extract[CrossSimpleComponentDescriptor](confMap)
+    }
+      
     else if (confMap.contains("evaluator")) extract[EvaluatorDescriptor](confMap)
     else if (confMap.contains("class")) extract[SimpleComponentDescriptor](confMap)
     else flattenConfMap(confMap)
+    
+    
+   private def show(x: Option[String]) = x match {
+      case Some(s) => s
+      case None => "?"
+   }
 
   /**
    * Returns "flattened," effective version of the component where all "inherits" are
@@ -249,6 +259,32 @@ abstract class ModParser(baseDir: Option[String] = None) {
       }
     // add the rest of the properties in the parent to the merged map
     mergedPropertiesConf ++ flattenConfMap(parentConfMap).filterNot { case (k, v) => childConfMap.contains(k) }
+  }
+  
+  /*
+   * Methods defined to extract the number of possible configurations for
+   * each Annotator at each stage, used to construct a configuration space tree composed only of numbers,
+   * which we can read in Java and define a path.
+   */
+  
+  private def calculateConfigs(confMap: Map[String, Any]) : Integer = {
+    print("\n*******************************************************\n")
+      println("Map: " + confMap.get("class"))
+      val m = (confMap.get("cross-opts"))
+      val map = m.get.asInstanceOf[Map[_,_]]
+      var acum = 1
+      println(m.get)
+      println("Opts: " + map.size)
+      for ((k,v) <- map){
+    	  //println("Val: " + v.getClass)
+    	  val list = v.asInstanceOf[ListParameter]
+    	  acum *= list.pList.size
+    	  println("List: " + list.pList)
+      }
+      println("Configs: " + acum)
+      
+      print("********************************************************\n")
+    1
   }
 
 }
