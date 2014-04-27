@@ -12,6 +12,9 @@ import edu.cmu.lti.oaqa.bagpipes.configuration.Parameters._
 import net.liftweb.json.FullTypeHints
 import net.liftweb.json.TypeHints
 
+import bouncingExploration.BouncingExploration
+import scala.collection.JavaConversions._
+
 /**
  * Maps a configuration descriptor (specified as its content or file path) to its canonical [[$confDes]]
  * case class representation as specified in [[$packagePath.ConfigurationDescriptors]].
@@ -104,7 +107,8 @@ abstract class ModParser(baseDir: Option[String] = None) {
     //scala.Map->(flattened+converted to parameters)scala.Map
     val configMap = flattenConfMap(resMap)
     
-    //println("\n\n----------Configuration Map--------: \n\n" + configMap.toString)
+    //We call our method here in order to build the configurations tree
+    calculateConfigs(configMap)
     
     extract[ConfigurationDescriptor](configMap)
     
@@ -203,8 +207,6 @@ abstract class ModParser(baseDir: Option[String] = None) {
     else if (confMap.contains("cross-opts") && confMap.contains("evaluator"))
       extract[CrossEvaluatorDescriptor](confMap)
     else if (confMap.contains("cross-opts")){
-    	//We call our method here
-      calculateConfigs(confMap)
       extract[CrossSimpleComponentDescriptor](confMap)
     }
       
@@ -267,24 +269,54 @@ abstract class ModParser(baseDir: Option[String] = None) {
    * which we can read in Java and define a path.
    */
   
-  private def calculateConfigs(confMap: Map[String, Any]) : Integer = {
-    print("\n*******************************************************\n")
-      println("Map: " + confMap.get("class"))
-      val m = (confMap.get("cross-opts"))
-      val map = m.get.asInstanceOf[Map[_,_]]
-      var acum = 1
-      println(m.get)
-      println("Opts: " + map.size)
-      for ((k,v) <- map){
-    	  //println("Val: " + v.getClass)
-    	  val list = v.asInstanceOf[ListParameter]
-    	  acum *= list.pList.size
-    	  println("List: " + list.pList)
+  private def calculateConfigs(configMap: Map[String, Any]) : Unit = {
+    
+    BouncingExploration.main(Array[String]())
+    
+    val explorer = new BouncingExploration()
+    
+    
+	val pipeline = configMap.get("pipeline").get.asInstanceOf[List[_]]
+    println("\n\n----------Configuration Map--------: \n\n")
+    val phases = pipeline.size
+    var level = 1
+    println("Total phases: " + phases + "\n")
+    
+    var name = ""
+    var depth = 1
+    
+    
+    for(phase <- pipeline){
+      var phaseDesc = phase.asInstanceOf[PhaseDescriptor]
+      //println("Phase: " + phaseDesc.toString())
+      println("Phase: " + phaseDesc.phase.toString())
+      var annotators = phaseDesc.options.asInstanceOf[List[_]]
+      println("Annotators on this phase: " + annotators.size + "\n")
+      for(comp <- annotators){
+        var compDesc = comp.asInstanceOf[CrossSimpleComponentDescriptor]
+        var opts = compDesc.getCrossParams.asInstanceOf[Map[_,_]]
+        println("Annotator: " + compDesc.getClassName)
+        var acum = 1
+        var option = 1  
+        for((key,value)<-opts){
+          println("Cross-opts: " + key)
+          var params = value.asInstanceOf[ListParameter]
+          acum *= params.pList.size
+        }
+        for(i <- 0 to acum){
+          explorer.addAnnotator(compDesc.getClassName, level, i)
+        }
+        println("Configurations: " + acum + "\n")
       }
-      println("Configs: " + acum)
       
-      print("********************************************************\n")
-    1
+      print("\n************************************************\n")
+      level+=1
+    }
+    
+    explorer.printTree()
+    
+    println("\n" + explorer.totalPaths() + "\n")
+    
   }
 
 }

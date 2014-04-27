@@ -27,6 +27,21 @@ public class Tree {
         currentMin=0;
     }
     
+    public void newTree(){
+    	
+    }
+    
+    public void newPhase(){
+    	
+    }
+    
+    public void addChild(){
+    	
+    }
+    
+    
+    //-------------------------------- OLD METHODS ----------------------------------//
+    
     public void generateTree(int b, int d, int min, int max){
         this.b=b;
         this.d=d;

@@ -1,5 +1,6 @@
 package bouncingExploration;
 import java.text.DecimalFormat;
+import java.util.LinkedList;
 
 public class BouncingExploration {
 
@@ -7,10 +8,36 @@ public class BouncingExploration {
     private static double meanError=0;
     private static double currentError=0;
     private static long time=System.nanoTime();
+    public static ConfigurationTree tree;
     
     public static void main(String[] args) {
-        // TODO code application logic here 
-        Tree CS = new Tree();
+    	
+    	tree = new ConfigurationTree(0);
+    	
+    	
+//    	tree.addAnnotator("TextSegmenter", 1,1);
+//    	tree.addAnnotator("TextSegmenter", 1,2);
+//    	tree.addAnnotator("TextSegmenter", 1,3);
+//    	tree.addAnnotator("Standford", 2,1);
+//    	tree.addAnnotator("Annotator_A", 3,1);
+//    	tree.addAnnotator("Annotator_A", 3,2);
+//    	tree.addAnnotator("Annotator_A", 3,3);
+//    	tree.addAnnotator("Annotator_B", 3,1);
+//    	tree.addAnnotator("Annotator_B", 3,2);
+//    	tree.addAnnotator("NoiseFilter", 4,1);
+//    	tree.addAnnotator("NoiseFilter", 4,2);
+//    	tree.addAnnotator("NoiseFilter", 4,3);
+//    	tree.addAnnotator("NoiseFilter", 4,4);
+//    	tree.addAnnotator("NoiseFilter", 4,5);
+//    	tree.addAnnotator("NoiseFilter", 4,6);
+//    	tree.addAnnotator("NoiseFilter", 4,7);
+//    	tree.addAnnotator("NoiseFilter", 4,8);
+//    	tree.printTree();
+//    	System.out.println("\n Total paths: " + tree.getTotalPaths());
+    	
+	
+
+        //Tree CS = new Tree();
         
         /*
          * Parámetros para probar el algoritmo (test) en orden:
@@ -29,18 +56,18 @@ public class BouncingExploration {
          * Evitar valores de amplitud y profundidad mayores a 6,6 (por cuestiones de tiempo)
          */
 
-        for(int i=0;i<5;i++){
-            test(CS,6,6,10,30,0.02,0.02,3);             
-            System.out.println("");       
-        }
-        meanError = meanError/(double)5;
-        System.out.println("\nMean Error: " + twoPlace.format(meanError) + "%");
-        System.out.println("Time: " + ((System.nanoTime()-time)/1000000) + " miliseconds");
+//        for(int i=0;i<5;i++){
+//            test(CS,6,6,10,30,0.02,0.02,3);             
+//            System.out.println("");       
+//        }
+//        meanError = meanError/(double)5;
+//        System.out.println("\nMean Error: " + twoPlace.format(meanError) + "%");
+//        System.out.println("Time: " + ((System.nanoTime()-time)/1000000) + " miliseconds");
         
     }
     
-    public void aMethod(String s){
-    	
+    public void buildTree(String s){
+    	System.out.println("\nBouncing");
     }
     
     private static void test(Tree CS, int b, int d, int min, int max, double exp, double improv, int depurations){
@@ -56,5 +83,17 @@ public class BouncingExploration {
         } 
         
         meanError+=currentError;
+    }
+    
+    public void addAnnotator(String name, int phase, int option){
+    	tree.addAnnotator(name, phase, option);
+    }
+    
+    public void printTree(){
+    	tree.printTree();
+    }
+    
+    public int totalPaths(){
+    	return tree.getTotalPaths();
     }
 }
