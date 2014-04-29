@@ -279,6 +279,9 @@ abstract class ModParser(baseDir: Option[String] = None) {
 	val pipeline = configMap.get("pipeline").get.asInstanceOf[List[_]]
     println("\n\n----------Configuration Map--------: \n\n")
     val phases = pipeline.size
+    
+    explorer.setPhases(pipeline.size)
+    
     var level = 1
     println("Total phases: " + phases + "\n")
     
@@ -303,7 +306,7 @@ abstract class ModParser(baseDir: Option[String] = None) {
           var params = value.asInstanceOf[ListParameter]
           acum *= params.pList.size
         }
-        for(i <- 0 to acum){
+        for(i <- 1 to acum){
           explorer.addAnnotator(compDesc.getClassName, level, i)
         }
         println("Configurations: " + acum + "\n")
@@ -315,7 +318,9 @@ abstract class ModParser(baseDir: Option[String] = None) {
     
     explorer.printTree()
     
-    println("\n" + explorer.totalPaths() + "\n")
+    println("Total nodes: " + explorer.getTotalNodes())
+    
+    println("Total nodes: " + explorer.genPaths())
     
   }
 

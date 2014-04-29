@@ -13,9 +13,9 @@ public class AnnotatorNode {
 	public int phase;
 	public int option;
 	private int ID;
-	private static int ID_;
+	private static int ID_ = 0;
 	
-	public AnnotatorNode(String annotator, int phase,int option){
+	public AnnotatorNode(String annotator, int phase,int option, SecureRandom rand){
 		ID_++;
 		this.ID=ID_;
 		this.annotator=annotator;
@@ -23,10 +23,11 @@ public class AnnotatorNode {
 		this.option=option;
 		configs=0;
 		childs = new LinkedList();
+		this.cost = Math.exp(-rand.nextDouble());
 	}
 	
-	public void addChild(String annotator, int phase, int option){
-		childs.add(new AnnotatorNode(annotator,phase,option));
+	public void addChild(String annotator, int phase, int option, SecureRandom rand){
+		childs.add(new AnnotatorNode(annotator,phase,option,rand));
 		configs++;
 	}
 	
@@ -71,6 +72,40 @@ public class AnnotatorNode {
 	 */
 	public int randomChild(SecureRandom rand){
 		return rand.nextInt(configs);
+	}
+	
+	public AnnotatorNode getChildWithID(int ID){
+		AnnotatorNode child = null;
+		for(AnnotatorNode aux : this.childs){
+				if(aux.ID==ID){
+					child = aux;
+					break;
+				}
+		}
+		
+		return child;
+		
+	}
+	
+	public void removeChildsWithoutIDS(LinkedList<Integer> ids){
+		int size = this.childs.size();
+		int nulls = 0;
+		
+		for(int i=0; i<size;i++){
+			if(!ids.contains(childs.get(i).ID)){
+				childs.set(i, null);
+				configs--;
+				nulls++;
+			}
+		}
+		
+		for(int i = 0;i<nulls;i++){
+			childs.remove(null);
+		}
+		
+		
+
+		
 	}
 
 }
