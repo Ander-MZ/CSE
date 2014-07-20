@@ -1,0 +1,6 @@
+project/target/*
+target/*
+*.class
+**/*.class
+*.jar
+.DS_Store
