@@ -1,9 +1,14 @@
 configuration:
-    name: oaqa-test
-    author: oaqa 
+  name: oaqa-tutorial
+  author: oaqa 
 collection-reader:
-    inherit: collection_reader.filesystem-collection-reader
+  inherit: collection_reader.filesystem-collection-reader
 pipeline:
-    - phase: RoomNumberAnnotators
-      options: 
-        - inherit: tutorial.ex1.RoomNumberAnnotator
+  - phase: RoomNumberAnnotators
+    options: 
+     - inherit: tutorial.ex1.RoomNumberAnnotator
+     - inherit: tutorial.ex2.RoomNumberAnnotator
+  - phase: DateTimeAnnotators
+    options: 
+     - inherit: tutorial.ex3.SimpleTutorialDateTime
+     - inherit: tutorial.ex3.TutorialDateTime

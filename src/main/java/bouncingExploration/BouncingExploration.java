@@ -39,21 +39,27 @@ public class BouncingExploration {
     }
     
     public void genPaths(){
+    	
+    	tree.calcTrueMin();
+    	System.out.println("True Min: " + tree.trueMin);
+    	System.out.println("True Max: " + tree.trueMax + "\n");
+    	
     	LinkedList<LinkedList<Integer>> paths = tree.generatePaths(0.1);
-    	System.out.println("\nSample Size: " + paths.size());
+    	
+    	
     	paths = tree.bestLists(paths, 1.0);
     	tree.generateSampleTree(paths);
-    	//tree.printTree();
+    	tree.printTree();
     	paths = tree.generatePaths(0.5);
     	paths = tree.bestLists(paths, 1.0);
     	
     	tree.generateSampleTree(paths);
-    	
+    	tree.printTree();
     	paths = tree.generatePaths(0.5);
     	paths = tree.bestLists(paths, 1.0);
     	
     	tree.generateSampleTree(paths);
-    	
+    	tree.printTree();
     	paths = tree.generatePaths(0.5);
     	paths = tree.bestLists(paths, 1.0);
     }

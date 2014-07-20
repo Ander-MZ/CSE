@@ -12,7 +12,6 @@ import edu.cmu.lti.oaqa.bagpipes.configuration.Parameters._
 import net.liftweb.json.FullTypeHints
 import net.liftweb.json.TypeHints
 
-import bouncingExploration.BouncingExploration
 import scala.collection.JavaConversions._
 
 /**
@@ -85,8 +84,6 @@ abstract class ModParser(baseDir: Option[String] = None) {
       case true => getConfigurationMapFromPath(resource)
     }
     
-    //println("\n\n----------Resources Map--------: \n\n" + resMap.toString)
-    
     parse(resMap)
   }
 
@@ -106,10 +103,6 @@ abstract class ModParser(baseDir: Option[String] = None) {
     //flatten and convert configuration maps to configuration maps with parameters 
     //scala.Map->(flattened+converted to parameters)scala.Map
     val configMap = flattenConfMap(resMap)
-    
-    //We call our method here in order to build the configurations tree
-    calculateConfigs(configMap)
-    
     extract[ConfigurationDescriptor](configMap)
     
   }
@@ -268,61 +261,7 @@ abstract class ModParser(baseDir: Option[String] = None) {
    * each Annotator at each stage, used to construct a configuration space tree composed only of numbers,
    * which we can read in Java and define a path.
    */
-  
-  private def calculateConfigs(configMap: Map[String, Any]) : Unit = {
-    
-    BouncingExploration.main(Array[String]())
-    
-    val explorer = new BouncingExploration()
-    
-    
-	val pipeline = configMap.get("pipeline").get.asInstanceOf[List[_]]
-    println("\n\n----------Configuration Map--------: \n\n")
-    val phases = pipeline.size
-    
-    explorer.setPhases(pipeline.size)
-    
-    var level = 1
-    println("Total phases: " + phases + "\n")
-    
-    var name = ""
-    var depth = 1
-    
-    
-    for(phase <- pipeline){
-      var phaseDesc = phase.asInstanceOf[PhaseDescriptor]
-      //println("Phase: " + phaseDesc.toString())
-      println("Phase: " + phaseDesc.phase.toString())
-      var annotators = phaseDesc.options.asInstanceOf[List[_]]
-      println("Annotators on this phase: " + annotators.size + "\n")
-      for(comp <- annotators){
-        var compDesc = comp.asInstanceOf[CrossSimpleComponentDescriptor]
-        var opts = compDesc.getCrossParams.asInstanceOf[Map[_,_]]
-        println("Annotator: " + compDesc.getClassName)
-        var acum = 1
-        var option = 1  
-        for((key,value)<-opts){
-          println("Cross-opts: " + key)
-          var params = value.asInstanceOf[ListParameter]
-          acum *= params.pList.size
-        }
-        for(i <- 1 to acum){
-          explorer.addAnnotator(compDesc.getClassName, level, i)
-        }
-        println("Configurations: " + acum + "\n")
-      }
-      
-      print("\n************************************************\n")
-      level+=1
-    }
-    
-    explorer.printTree()
-    
-    println("Total nodes: " + explorer.getTotalNodes())
-    
-    println("Total nodes: " + explorer.genPaths())
-    
-  }
+
 
 }
   

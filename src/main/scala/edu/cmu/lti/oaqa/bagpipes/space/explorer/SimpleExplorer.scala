@@ -4,8 +4,11 @@ import edu.cmu.lti.oaqa.bagpipes.space.ConfigurationSpace._
 import edu.cmu.lti.oaqa.bagpipes.configuration.AbstractDescriptors._
 import edu.cmu.lti.oaqa.bagpipes.configuration.Descriptors.CollectionReaderDescriptor
 import edu.cmu.lti.oaqa.bagpipes.space.Leaf
+import edu.cmu.lti.oaqa.bagpipes.space.Root
+import edu.cmu.lti.oaqa.bagpipes.space.Node
 import edu.cmu.lti.oaqa.bagpipes.space.TreeWithChildren
 import scala.collection.immutable.Stream.consWrapper
+
 
 /**
  * SimpleExplorer provides a depth/breadth-first (given by the specified
@@ -21,7 +24,7 @@ protected class SimpleExplorer[R <: T, T, I](order: Ordering) extends Explorer[R
    * Returns either a depth-first or breadth-first ordering of the configuration
    * space as specified by `Ordering`.
    *
-   * @oaram initial
+   * @param initial
    * 			The initial position, or root in the configuration space tree.
    */
 
@@ -29,12 +32,13 @@ protected class SimpleExplorer[R <: T, T, I](order: Ordering) extends Explorer[R
     case Depth => fromDepth(initial) //depth-first
     case Breadth => fromBreadth(initial) //breadth-first
   }
+  
 
   /**
    * Returns a stream of [[edu.cmu.lti.oaqa.bagpipes.space.TreeWithHistory]]
    * using depth-first search traversal.
    *
-   * @oaram initial
+   * @param initial
    * 			The initial position (or root) in the configuration space tree.
    */
   private def fromDepth(initial: Stream[ExecutableTree]): Stream[ExecutableTree] = initial match {
@@ -47,7 +51,7 @@ protected class SimpleExplorer[R <: T, T, I](order: Ordering) extends Explorer[R
    * Returns a stream of [[edu.cmu.lti.oaqa.bagpipes.space.TreeWithHistory]]
    * using breadth-first search traversal.
    *
-   * @oaram initial
+   * @param initial
    * 			the initial position (or root) in the configuration space tree.
    */
   private def fromBreadth(initial: Stream[ExecutableTree]): Stream[ExecutableTree] = {

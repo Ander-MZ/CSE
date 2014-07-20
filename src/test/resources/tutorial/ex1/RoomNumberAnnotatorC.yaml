@@ -1,0 +1,6 @@
+class: uima.components.examples.ex3.RoomNumberAnnotator
+
+#params:
+#  test: param3
+#persistence-provider: 
+#   inherit: ecd.default-log-persistence-provider

@@ -133,7 +133,10 @@ public class FileSystemCollectionReader extends JCasCollectionReader_ImplBase {
 	 */
 	private void addFilesFromDir(File dir) {
 		File[] files = dir.listFiles();
-		for (int i = 0; i < files.length; i++) {
+       		System.out.println("Files is null?: " + (files == null));
+		for (int i = 0; i < 25; i++) {
+			System.out.println("---");
+     // System.out.println("Files["+i+"] is null?: " + (files[i]==null));
 			if (!files[i].isDirectory()) {
 				mFiles.add(files[i]);
 			} else if (mRecursive) {

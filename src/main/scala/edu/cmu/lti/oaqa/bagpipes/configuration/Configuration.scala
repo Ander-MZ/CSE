@@ -32,8 +32,9 @@ object Descriptors {
     def this(`class`: String) = this(`class`: String, Map())
   }
 
-  case class CollectionReaderDescriptor(`collection-class`: String, params: Map[String, Parameter] = Map()) extends AtomicExecutableConf(`collection-class`, params) with PipelineDescriptor {
+  case class CollectionReaderDescriptor(`collection-class`: String, params: Map[String, Parameter] = Map()) extends AtomicExecutableConf(`collection-class`, params) with PipelineDescriptor with java.io.Serializable {
     // need to expiicitly declare constructors with default arguments to make lift-json extraction happy
+	
     def this(`collection-class`: String) = this(`collection-class`, Map())
   }
   case class PhaseDescriptor(phase: String, options: List[AtomicExecutableConf]) extends PipelineDescriptor
@@ -53,14 +54,17 @@ object Descriptors {
 
 object AbstractDescriptors {
 
-  trait PipelineDescriptor
+  trait PipelineDescriptor extends java.io.Serializable  
   trait AtomicExecutable extends PipelineDescriptor
   sealed abstract trait Expandable {
     def expand: Stream[AtomicExecutableConf]
   }
 
-  sealed abstract class AtomicExecutableConf(className: String, params: Map[String, Parameter]) extends ExecutableConf(className, params) with AtomicExecutable
-  sealed abstract class ExecutableConf(className: String, params: Map[String, Parameter]) extends PipelineDescriptor {
+  sealed abstract class AtomicExecutableConf(className: String, params: Map[String, Parameter]) extends ExecutableConf(className, params) with AtomicExecutable with java.io.Serializable {
+    def this() =  this(???,???)
+  }
+  sealed abstract class ExecutableConf(className: String, params: Map[String, Parameter]) extends PipelineDescriptor with java.io.Serializable {
+    def this() = this(???,???)
     def getClassName = className
     def getParams = params
     //extends ExecutableDescriptor with ConfExpr

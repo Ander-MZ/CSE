@@ -121,7 +121,7 @@ object ConfigurationSpace {
       case Leaf(elem, hist) => Leaf(elem, hist)
       case Node(elem, children, hist) => Node(elem, children.flatMap(expandNode(expand, _)).map(expandNodes(expand, _)), hist)
     }
-    Root(confSpace.root, confSpace.trees.flatMap(expandNode(expand, _)).map(expandNodes(expand, _)))
+    Root(confSpace.getRoot, confSpace.getTrees.flatMap(expandNode(expand, _)).map(expandNodes(expand, _)))
   }
 
   /**

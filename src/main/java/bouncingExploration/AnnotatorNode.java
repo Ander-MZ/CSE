@@ -23,7 +23,13 @@ public class AnnotatorNode {
 		this.option=option;
 		configs=0;
 		childs = new LinkedList();
-		this.cost = Math.exp(-rand.nextDouble());
+		if(phase==0){
+			this.cost=0;
+		}
+		else{
+			this.cost = Math.exp(-rand.nextDouble());
+		}
+		
 	}
 	
 	public void addChild(String annotator, int phase, int option, SecureRandom rand){

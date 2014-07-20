@@ -1,6 +1,6 @@
 collection-class: uima.components.collection.FileSystemCollectionReader
 params:
-    InputDirectory: src/test/resources/data/
+    InputDirectory: /root/bagpipes/src/test/resources/data/
     Language: en
     BrowseSubdirectories: FALSE
     Encoding: UTF-8 

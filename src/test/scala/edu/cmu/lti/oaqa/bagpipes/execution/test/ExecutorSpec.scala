@@ -50,18 +50,18 @@ class ExecutorSpec extends FeatureSpec {
     }
   }
 
-  feature("Simple KBestPath explorer") {
-    new confTrees with kBest {
-      val controller1 = ExecutionController(KBestPathExplorer(TestScorer1), UimaExecutor)
-      val controller2 = ExecutionController(KBestPathExplorer(TestScorer2), UimaExecutor)
-      scenario("executing confTree4 with TestScorer1") {
-           controller1.execute(confTree4)
-      }
-      scenario("executing confTree4 with TestScorer2") {
-        //  controller2.execute(confTree4)
-      }
-    }
-  }
+//  feature("Simple KBestPath explorer") {
+//    new confTrees with kBest {
+//      val controller1 = ExecutionController(KBestPathExplorer(TestScorer1), UimaExecutor)
+//      val controller2 = ExecutionController(KBestPathExplorer(TestScorer2), UimaExecutor)
+//      scenario("executing confTree4 with TestScorer1") {
+//           controller1.execute(confTree4)
+//      }
+//      scenario("executing confTree4 with TestScorer2") {
+//        //  controller2.execute(confTree4)
+//      }
+//    }
+//  }
 }
 
 object SimpleDepthExecutionController extends ExecutionController(DepthExplorer, SimpleExecutor)

@@ -13,6 +13,7 @@ public class ConfigurationTree {
     private SecureRandom random;
     private int totalPaths;
     public double trueMin;
+    public double trueMax;
 
 	private double improvFact;
 	
@@ -23,6 +24,7 @@ public class ConfigurationTree {
 		totalPaths=0;
 		nodes=0;
 		trueMin = 2147483647;
+		trueMax = -2147483646;
 	}
 	
     public int getTotalPaths() {
@@ -134,13 +136,33 @@ public class ConfigurationTree {
 	}
 	
 	private void printTree(AnnotatorNode node, String indent){
-		System.out.println(indent + node.getAnnotator() + " (Config [" + node.option + "])");
+		System.out.println(indent + node.getAnnotator() + " (Config [" + node.option + "])" + " <Costo= " + node.getCost() + " >");
 		if(node.childs.size()>0){
 			for(AnnotatorNode aux : node.childs){
 				printTree(aux,(indent+"\t"));
 			}
 		}
 		
+	}
+	
+	public void calcTrueMin(){
+		calcTrueMin(root,0);
+	}
+	
+	private void calcTrueMin(AnnotatorNode node, double cost){
+		if(node.childs.size()==0){
+			if(cost<trueMin){
+				trueMin = cost;
+			}
+			if(cost>trueMax){
+				trueMax = cost;
+			}
+		}
+		else{
+			for(AnnotatorNode child : node.childs){
+				calcTrueMin(child, cost + child.getCost());
+			}
+		}
 	}
 	
 	
@@ -150,7 +172,7 @@ public class ConfigurationTree {
 		double pathCost = 0;
 		AnnotatorNode currentNode = root;
 		
-		trueMin = 2147483647;
+		double min = 2147483647;
 		
 		for(LinkedList<Integer> testList : list){
 			currentNode = root;
@@ -159,13 +181,13 @@ public class ConfigurationTree {
 				pathCost+=currentNode.getCost();
 			}
 			costs.add(list.indexOf(testList), pathCost);
-			if(pathCost<trueMin){
-				trueMin = pathCost;
+			if(pathCost<min){
+				min = pathCost;
 			}
 			pathCost = 0;
 		}
 		
-		System.out.println("Tree Min: " + trueMin);
+		System.out.println("Tree Min: (" + list.size() + " paths) " + min);
 		
 		int bestindex = 0;
 		int size = list.size();
