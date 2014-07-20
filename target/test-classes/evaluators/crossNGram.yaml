@@ -1,3 +1,0 @@
-evaluator: default
-cross-opts:
-    n: [1,2,3]

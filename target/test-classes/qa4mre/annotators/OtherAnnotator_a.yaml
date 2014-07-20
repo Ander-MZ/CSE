@@ -1,3 +1,0 @@
-class: edu.cmu.lti.qalab.annotators.OtherAnnotator_a
-cross-opts:
-  PROBABILITY_A: [0.75,0.80,0.95]
