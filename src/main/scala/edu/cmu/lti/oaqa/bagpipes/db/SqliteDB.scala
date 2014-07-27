@@ -7,6 +7,7 @@ import Database.threadLocalSession
 import BagpipesDatabase.{Experiment, Trace, Metric}
 import javax.sql.rowset.serial.SerialBlob
 import com.typesafe.scalalogging.slf4j.Logging
+import scala.slick.jdbc.meta.MTable
 
 /** SQLite implementation of BagpipesDatabase.
  *  
@@ -118,7 +119,10 @@ class SqliteDB(url: String) extends BagpipesDatabase with Logging {
   
   /** Create the primary tables. */
   def createTables(): Unit = {
-    db withSession { ddl.create }
+    db withSession { 
+      if (MTable.getTables.list.length == 1) //No user created tables exist
+        ddl.create 
+      }
   }
   
   /** Drop the primary tables. 
@@ -141,7 +145,7 @@ class SqliteDB(url: String) extends BagpipesDatabase with Logging {
   
   /** Insert a Trace into the database. */
   def insertTrace(trc: Trace): Unit = {
-    db withSession { Traces.forInsert.insert(trc.trace, trc.expUuid, trc.casXmi.getBytes(1, trc.casXmi.length().toInt)) }
+    db withSession { Traces.forInsert.insert(trc.trace, trc.expUuid, trc.casXmi.getBytes(1, trc.casXmi.length().toInt) ) }
   }
   
   /** Insert a Metric into the database. */

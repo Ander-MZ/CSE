@@ -15,4 +15,5 @@ trait ExecutorTypes[I, C <: ExecutableComponent[I]]  {
   def updateCache(newInput: Result[I], newComponent: C, trace: Trace)(implicit cache: Cache) = cache match {
     case Cache(dataCache, compCache) => Cache(dataCache ++ Map(trace -> newInput), compCache ++ Map(trace.componentTrace -> newComponent))
   }
+  
 }

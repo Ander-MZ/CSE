@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Implementation-Vendor: com.typesafe
+Implementation-Title: scalalogging-log4j
+Implementation-Version: 1.0.1
+Implementation-Vendor-Id: com.typesafe
+Specification-Vendor: com.typesafe
+Specification-Title: scalalogging-log4j
+Implementation-URL: https://github.com/typesafehub/scalalogging
+Specification-Version: 1.0.1
+

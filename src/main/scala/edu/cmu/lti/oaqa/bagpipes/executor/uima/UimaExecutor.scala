@@ -11,13 +11,14 @@ import edu.cmu.lti.oaqa.bagpipes.annotation.QAAnalytic
  * @author Avner Maiberg (amaiberg@cs.cmu.edu)
  */
 
-object UimaExecutor extends Executor[JCas, UimaComponent] {
+object UimaExecutor extends Executor[JCas, UimaComponent] with java.io.Serializable{
+  
   private def newJCas() = JCasFactory.createJCas(UimaComponent.getTypeSystem)
   override def reset(cls: String, params: List[(String, Any)]) = ???
   override val componentFactory: ComponentFactory[JCas, UimaComponent] = UimaComponentFactory
   override def getFirstInput: Result[JCas] = Result(newJCas())(QAAnalytic())
 
-  object UimaComponentFactory extends ComponentFactory[JCas, UimaComponent] {
+  object UimaComponentFactory extends ComponentFactory[JCas, UimaComponent] with java.io.Serializable{
     @throws[ClassCastException]("If the class is not a child of CollectionReader")
     override def createReader(readerDesc: CollectionReaderDescriptor) = new UimaReader(readerDesc)
 

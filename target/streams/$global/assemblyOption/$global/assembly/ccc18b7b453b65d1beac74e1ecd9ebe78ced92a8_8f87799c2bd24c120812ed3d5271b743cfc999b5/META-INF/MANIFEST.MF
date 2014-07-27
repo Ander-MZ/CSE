@@ -1,0 +1,56 @@
+Manifest-Version: 1.0
+Archiver-Version: Plexus Archiver
+Created-By: Apache Maven Bundle Plugin
+Built-By: rgoers
+Build-Jdk: 1.6.0_37
+Implementation-Title: Apache Log4J Core
+Implementation-Vendor: Apache Software Foundation
+Implementation-Vendor-Id: org.apache
+Implementation-Version: 2.0-beta4
+Specification-Title: Apache Log4J Core
+Specification-Vendor: Apache Software Foundation
+Specification-Version: 2.0-beta4
+X-Compile-Source-JDK: 1.5
+X-Compile-Target-JDK: 1.5
+Bnd-LastModified: 1359359145016
+Bundle-Description: Apache Log4J Implementation.
+Bundle-DocURL: http://logging.apache.org/log4j/2.x/log4j-core/
+Bundle-License: http://www.apache.org/licenses/LICENSE-2.0.txt
+Bundle-ManifestVersion: 2
+Bundle-Name: Apache Log4J Core
+Bundle-SymbolicName: org.apache.logging.log4j-core
+Bundle-Vendor: Apache Software Foundation
+Bundle-Version: 2.0.0.beta4
+Export-Package: org.apache.logging.log4j.core.helpers;version="2.0.0.b
+ eta4",org.apache.logging.log4j.core.config.plugins;version="2.0.0.bet
+ a4",org.apache.logging.log4j.core.appender.rewrite;version="2.0.0.bet
+ a4",org.apache.logging.log4j.core.layout;version="2.0.0.beta4",org.ap
+ ache.logging.log4j.core.impl;version="2.0.0.beta4",org.apache.logging
+ .log4j.core.pattern;version="2.0.0.beta4",org.apache.logging.log4j.co
+ re.net;version="2.0.0.beta4",org.apache.logging.log4j.core.config;ver
+ sion="2.0.0.beta4",org.apache.logging.log4j.core.appender.rolling.hel
+ per;version="2.0.0.beta4",org.apache.logging.log4j.core.filter;versio
+ n="2.0.0.beta4",org.apache.logging.log4j.core;version="2.0.0.beta4",o
+ rg.apache.logging.log4j.core.appender.rolling;version="2.0.0.beta4",o
+ rg.apache.logging.log4j.core.lookup;version="2.0.0.beta4",org.apache.
+ logging.log4j.core.appender;version="2.0.0.beta4",org.apache.logging.
+ log4j.core.appender.routing;version="2.0.0.beta4",org.apache.logging.
+ log4j.core.selector;version="2.0.0.beta4",org.apache.logging.log4j.co
+ re.jmx;version="2.0.0.beta4"
+Import-Package: javax.activation,javax.jms,javax.mail,javax.mail.inter
+ net,javax.mail.util,javax.naming,javax.xml.parsers,javax.xml.transfor
+ m,javax.xml.transform.stream,javax.xml.validation,org.apache.logging.
+ log4j,org.apache.logging.log4j.message,org.apache.logging.log4j.spi,o
+ rg.apache.logging.log4j.status,org.apache.logging.log4j.util,org.code
+ haus.jackson,org.codehaus.jackson.map,org.osgi.framework,org.osgi.fra
+ mework.wiring,org.w3c.dom,org.xml.sax
+Include-Resource: Log4J-V2.0.xsd=src/main/resources/Log4J-V2.0.xsd,MET
+ A-INF/log4j-provider.properties=src/main/resources/META-INF/log4j-pro
+ vider.properties,META-INF/DEPENDENCIES=target/maven-shared-archive-re
+ sources/META-INF/DEPENDENCIES,META-INF/LICENSE=target/maven-shared-ar
+ chive-resources/META-INF/LICENSE,META-INF/NOTICE=target/maven-shared-
+ archive-resources/META-INF/NOTICE
+Log4jReleaseVersion: 2.0-beta4
+Private-Package: .
+Tool: Bnd-1.50.0
+

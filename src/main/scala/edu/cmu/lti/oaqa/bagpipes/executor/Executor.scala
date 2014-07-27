@@ -36,14 +36,14 @@ trait Executor[I, C <: ExecutableComponent[I]] extends ExecutorTypes[I, C] {
    * @param trace
    * 	The process trace of components associated with the next input
    */
-  //def execute(execDesc: ExecutableConf, trace: Trace) = ???
+
   final def execute(execDesc: AtomicExecutableConf, trace: Trace)(implicit cache: Cache): (Result[I], Cache) = {
     val newTrace: Trace = trace ++ execDesc // update trace
     val component: C = if (cache.componentCache.contains(newTrace.componentTrace))
-      cache.componentCache(newTrace.componentTrace) // get cached component
+      cache.componentCache(newTrace.componentTrace) // get cached component (map.get(key))
     else 
-      componentFactory.create(execDesc) // create new component from factory TODO: put this in factory
-    val prevExecResult: Result[I] = cache.dataCache(trace) //get previous result up to current sub-trace
+      componentFactory.create(execDesc) // create new component from factory. TODO: put this in factory
+    val prevExecResult: Result[I] = cache.dataCache(trace) //get previous result up to current sub-trace (map.get(key))
     val execResult: Result[I] = component.execute(prevExecResult) // execute using previous result as input
     val updatedCache: Cache = updateCache(Result[I](execResult.getInput)(SimpleAnalytic(Nil)), component, newTrace)(cache) // update the cache
     val result = (execResult, updatedCache) // aggregate result with cache

@@ -57,6 +57,7 @@ class KBestPathExplorer[I](implicit scorer: Scorer[I]) extends Explorer[Collecti
     }
 
     def getMax(children: List[TreeWithHistory[AtomicExecutableConf]]) = children.maxBy(x => thisWeightMap((x.getElem, x.getHistory)))
+    
     def getBestTrace(initial: Stream[TreeWithHistory[AtomicExecutableConf]]): Stream[TreeWithHistory[AtomicExecutableConf]] = initial match {
       case Stream() => Stream()
       case (current @ Leaf(_, _)) #:: siblings => Stream(current)

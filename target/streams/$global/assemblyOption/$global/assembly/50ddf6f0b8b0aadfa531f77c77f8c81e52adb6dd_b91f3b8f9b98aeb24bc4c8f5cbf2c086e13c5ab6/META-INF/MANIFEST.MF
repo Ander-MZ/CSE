@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Implementation-Vendor: org.scalanlp
+Implementation-Title: breeze-math
+Implementation-Version: 0.4
+Implementation-Vendor-Id: org.scalanlp
+Specification-Vendor: org.scalanlp
+Specification-Title: breeze-math
+Specification-Version: 0.4
+

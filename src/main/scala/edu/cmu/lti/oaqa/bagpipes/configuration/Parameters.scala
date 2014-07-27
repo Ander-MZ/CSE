@@ -10,11 +10,12 @@ import java.util.HashMap
  */
 
 object Parameters {
-  sealed abstract class Parameter(elem: Any) {
+  sealed abstract class Parameter(elem: Any) extends java.io.Serializable {
     def getElem = elem
+    def this() = this(???)
   }
   case class IntegerParameter(value: Int) extends Parameter(value)
-  case class StringParameter(value: String) extends Parameter(value)
+  case class StringParameter(value: String) extends Parameter(value) with java.io.Serializable
   case class DoubleParameter(value: Double) extends Parameter(value)
   case class BooleanParameter(value: Boolean) extends Parameter(value)
   case class ListParameter(pList: List[Parameter]) extends Parameter(pList)

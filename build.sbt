@@ -1,13 +1,21 @@
+import AssemblyKeys._
+
 import NativePackagerKeys._
 
-mainClass := Some("edu.cmu.lti.oaqa.bagpipes.cmd.CmdParser")
+assemblySettings
 
-//managedSourceDirectories in Compile += baseDirectory.value / "src/test/"
+jarName in assembly := "bagpipes_1.0.jar"
 
-//managedResourceDirectories in Compile += baseDirectory.value / "src/test/resources/"
+test in assembly := {}
 
-//resources += file("./src/test/resources")
+name := "bagpipes_1.0"
+
+scalaVersion := "2.10.4"
+
+mainClass := Some("edu.cmu.lti.oaqa.bagpipes.run.BagPipesRun")
+
+mainClass in assembly := Some("edu.cmu.lti.oaqa.bagpipes.run.BagPipesRun")
+
+scalaSource in Compile := baseDirectory.value / "src"
 
 packageArchetype.java_application
-
-//scriptClasspath += baseDirectory.value + "src/test/resources"

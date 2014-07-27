@@ -1,0 +1,35 @@
+Manifest-Version: 1.0
+Archiver-Version: Plexus Archiver
+Created-By: Apache Maven Bundle Plugin
+Built-By: rgoers
+Build-Jdk: 1.6.0_37
+Implementation-Title: Apache Log4j API
+Implementation-Vendor: Apache Software Foundation
+Implementation-Vendor-Id: org.apache
+Implementation-Version: 2.0-beta4
+Specification-Title: Apache Log4j API
+Specification-Vendor: Apache Software Foundation
+Specification-Version: 2.0-beta4
+X-Compile-Source-JDK: 1.5
+X-Compile-Target-JDK: 1.5
+Bnd-LastModified: 1359359113723
+Bundle-Description: The Log4J API
+Bundle-DocURL: http://logging.apache.org/log4j/2.x/log4j-api/
+Bundle-License: http://www.apache.org/licenses/LICENSE-2.0.txt
+Bundle-ManifestVersion: 2
+Bundle-Name: Apache Log4j API
+Bundle-SymbolicName: org.apache.logging.log4j-api
+Bundle-Vendor: Apache Software Foundation
+Bundle-Version: 2.0.0.beta4
+Export-Package: org.apache.logging.log4j.message;version="2.0.0.beta4"
+ ,org.apache.logging.log4j.util;version="2.0.0.beta4",org.apache.loggi
+ ng.log4j.simple;version="2.0.0.beta4",org.apache.logging.log4j.status
+ ;version="2.0.0.beta4",org.apache.logging.log4j;version="2.0.0.beta4"
+ ,org.apache.logging.log4j.spi;version="2.0.0.beta4"
+Include-Resource: META-INF/DEPENDENCIES=target/maven-shared-archive-re
+ sources/META-INF/DEPENDENCIES,META-INF/LICENSE=target/maven-shared-ar
+ chive-resources/META-INF/LICENSE,META-INF/NOTICE=target/maven-shared-
+ archive-resources/META-INF/NOTICE
+Log4jReleaseVersion: 2.0-beta4
+Tool: Bnd-1.50.0
+

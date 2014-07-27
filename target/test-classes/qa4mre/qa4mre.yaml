@@ -6,7 +6,7 @@ configuration:
 #  inherit: persistence.local-persistence-provider
 
 collection-reader:
-  inherit: collectionreaders.CollectionReaderDescriptor
+  inherit: qa4mre/collectionreaders.CollectionReaderDescriptor
 #  params: 
 #    dataset: QA4MRE-13-test-main
 #    INPUT_DIR: data/13-test-main/
@@ -15,26 +15,26 @@ pipeline:
   # question and document annotations: data -> XMIs
   - phase: TextSegmenter
     options: 
-      - inherit: annotators.TextSegmenter
+      - inherit: qa4mre/annotators.TextSegmenter
 
   - phase: StanfordSentenceAnnotator
     options: 
-      - inherit: annotators.StanfordSentenceAnnotator
+      - inherit: qa4mre/annotators.StanfordSentenceAnnotator
       
   - phase: OtherAnnotator
     options: 
-      - inherit: annotators.OtherAnnotator_a
-      - inherit: annotators.OtherAnnotator_b
+      - inherit: qa4mre/annotators.OtherAnnotator_a
+      - inherit: qa4mre/annotators.OtherAnnotator_b
 
   - phase: NoiseFilter
     options: 
-      - inherit: annotators.NoiseFilter
+      - inherit: qa4mre/annotators.NoiseFilter
 
 #  - phase: StanfordNLPAnnotator
 #    options: 
 #      - pipeline:
-#          - inherit: annotators.StanfordNLPAnnotator
-#          - inherit: annotators.StanfordQuestionNLPAnnotator
+#          - inherit: qa4mre/annotators.StanfordNLPAnnotator
+#          - inherit: qa4mre/annotators.StanfordQuestionNLPAnnotator
 
 #  - inherit: ecd.phase
 #    name: PhraseAnnotator

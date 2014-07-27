@@ -7,10 +7,11 @@ import edu.cmu.lti.oaqa.bagpipes.configuration.Descriptors._
 import edu.cmu.lti.oaqa.bagpipes.configuration.AbstractDescriptors._
 import edu.cmu.lti.oaqa.bagpipes.scorer.Scorer
 import edu.cmu.lti.oaqa.bagpipes.scorer.DefaultScorer
-import edu.cmu.lti.oaqa.bagpipes.space._
 import edu.cmu.lti.oaqa.bagpipes.executor.Result
 import scala.collection.immutable.Stream.consWrapper
 import edu.cmu.lti.oaqa.bagpipes.executor.Trace
+import edu.cmu.lti.oaqa.bagpipes.space.explorer.Distribution
+import edu.cmu.lti.oaqa.bagpipes.space.explorer._
 
 /**
  *
@@ -24,7 +25,7 @@ class ExecutionController[I](explr: Explorer[CollectionReaderDescriptor, AtomicE
   //when instantiating the root in the stream. Find some better way of doing this,
   //maybe by storing the first one in the cache.
   def initializeCollectionReader(confRoot: Root[CollectionReaderDescriptor, AtomicExecutableConf]) = {
-    val collectionReaderDesc = confRoot.root
+    val collectionReaderDesc = confRoot.getRoot
     exctr.getComponentFactory.createReader(collectionReaderDesc)
   }
 
@@ -33,8 +34,36 @@ class ExecutionController[I](explr: Explorer[CollectionReaderDescriptor, AtomicE
     val collectionReader = initializeCollectionReader(confSpace)
     val totalInputs = collectionReader.getTotalInputs
     implicit val input = 0
+    //lazy val confSpaceStream = explr.fromRoot(confSpace)(input) //The configuration space gets explored by the explr object
+    
+    
+    
+     //----------------------------------------------------------------//
+    
     lazy val confSpaceStream = explr.fromRoot(confSpace)(input)
+    
 
+    println("")
+    
+    def formatTree(tree: Stream[_]): String = tree match {
+      case Stream() => "" //Empty stream
+      case elem #:: next => { //Stream
+        val s = elem match{
+          case r @ Root(_,_) => "Root"
+          case n @ Node(_,_,_) => "[Node]" + " <" +n.stdHashCode + ">"
+          case l @ Leaf(_,_) => "Leaf" + " <" + l.stdHashCode + ">"
+        }
+        
+         s + " " + formatTree(next)
+      }
+    }
+    
+    
+    println("\nSample: " + formatTree(confSpaceStream.tail) + "\n")
+   
+    //----------------------------------------------------------------//
+    
+    
     def execute(compDesc: TreeWithHistory[AtomicExecutableConf], input: Int)(implicit cache: exctr.Cache) = compDesc match {
       case (compDesc @ TreeWithHistory(elem, hist)) =>
         println("executing component (with history): " + compDesc)
@@ -53,7 +82,7 @@ class ExecutionController[I](explr: Explorer[CollectionReaderDescriptor, AtomicE
         cache
       //finished on given input  
       case (Stream(), input, (result, cache)) =>
-        println("finished input: #" + input)
+        println("finished input: #" + input + "\n")
         //maybe do stuff at end of the input
         //Move to next input from reader.
         //create new "blank" input for next execution stream
@@ -63,7 +92,7 @@ class ExecutionController[I](explr: Explorer[CollectionReaderDescriptor, AtomicE
       case ((compDesc @ TreeWithHistory(elem, hist)) #:: rest, input, (_, cache)) =>
         val execResult = execute(compDesc, input)(cache)
         //maybe do something with result here
-        execStream(nonRepeating(explr.from(rest)(input)), input)(execResult)
+        execStream(rest, input)(execResult)
 
       /*      //path from root-to-leaf
       case ((compDesc @ Leaf(elem, hist)) #:: rest, input, (res, cache)) => {
@@ -75,6 +104,7 @@ class ExecutionController[I](explr: Explorer[CollectionReaderDescriptor, AtomicE
 */
     }
     val res = execStream(confSpaceStream, totalInputs - 1)
+    //val res = execStream(tree, totalInputs - 1)
     //maybe do more stuff with result + cache
 
   }

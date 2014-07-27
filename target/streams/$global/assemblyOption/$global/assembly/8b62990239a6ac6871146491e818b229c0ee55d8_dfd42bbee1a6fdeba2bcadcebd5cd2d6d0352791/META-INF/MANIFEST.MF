@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Implementation-Vendor: org.specs2
+Implementation-Title: scalaz-core
+Implementation-Version: 7.0.0
+Implementation-Vendor-Id: org.specs2
+Specification-Vendor: org.specs2
+Specification-Title: scalaz-core
+Specification-Version: 7.0.0
+
