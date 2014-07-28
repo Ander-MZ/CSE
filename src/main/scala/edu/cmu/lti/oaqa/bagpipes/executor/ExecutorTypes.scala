@@ -6,6 +6,7 @@ trait ExecutorTypes[I, C <: ExecutableComponent[I]]  {
 
   type ComponentCache = Map[Stream[AtomicExecutableConf], C]
   type DataCache = Map[Trace, Result[I]]
+  def getEmptyCache = Cache(Map(),Map())
   case class Cache(dataCache: DataCache, componentCache: ComponentCache) {
     def ++(cache: Cache) = this match {
       case Cache(d, c) => Cache(d ++ cache.dataCache, c ++ cache.componentCache)

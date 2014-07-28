@@ -18,7 +18,7 @@ import edu.cmu.lti.oaqa.bagpipes.executor.Result
  *      AnalysisEngine to use.
  * @author Collin McCormack, and Avner Maiberg (amaiberg@cs.cmu.edu)
  */
-final class UimaAnnotator(compDesc: ComponentDescriptor) extends UimaComponent(compDesc) with Annotator[JCas] {
+final class UimaAnnotator(compDesc: ComponentDescriptor) extends UimaComponent(compDesc) with Annotator[JCas] with java.io.Serializable{
   // Create AnalysisEngine internally
 
   val componentClass = createAnalysisComponentClass(className)

@@ -127,7 +127,55 @@
 [0m[[0mdebug[0m] [0m	/Users/andemurillo/.ivy2/cache/net.java.dev.jets3t/jets3t/jars/jets3t-0.7.1.jar[0m
 [0m[[0mdebug[0m] [0m	/Users/andemurillo/.ivy2/cache/commons-httpclient/commons-httpclient/jars/commons-httpclient-3.1.jar[0m
 [0m[[0mdebug[0m] [0mWaiting for thread run-main to exit[0m
+[0m[[31merror[0m] [0m(run-main) org.apache.spark.SparkException: Job aborted due to stage failure: Task 0.0:2 had a not serializable result: java.io.NotSerializableException: org.apache.uima.analysis_engine.impl.PrimitiveAnalysisEngine_impl[0m
+org.apache.spark.SparkException: Job aborted due to stage failure: Task 0.0:2 had a not serializable result: java.io.NotSerializableException: org.apache.uima.analysis_engine.impl.PrimitiveAnalysisEngine_impl
+	at org.apache.spark.scheduler.DAGScheduler.org$apache$spark$scheduler$DAGScheduler$$failJobAndIndependentStages(DAGScheduler.scala:1033)
+	at org.apache.spark.scheduler.DAGScheduler$$anonfun$abortStage$1.apply(DAGScheduler.scala:1017)
+	at org.apache.spark.scheduler.DAGScheduler$$anonfun$abortStage$1.apply(DAGScheduler.scala:1015)
+	at scala.collection.mutable.ResizableArray$class.foreach(ResizableArray.scala:59)
+	at scala.collection.mutable.ArrayBuffer.foreach(ArrayBuffer.scala:47)
+	at org.apache.spark.scheduler.DAGScheduler.abortStage(DAGScheduler.scala:1015)
+	at org.apache.spark.scheduler.DAGScheduler$$anonfun$handleTaskSetFailed$1.apply(DAGScheduler.scala:633)
+	at org.apache.spark.scheduler.DAGScheduler$$anonfun$handleTaskSetFailed$1.apply(DAGScheduler.scala:633)
+	at scala.Option.foreach(Option.scala:236)
+	at org.apache.spark.scheduler.DAGScheduler.handleTaskSetFailed(DAGScheduler.scala:633)
+	at org.apache.spark.scheduler.DAGSchedulerEventProcessActor$$anonfun$receive$2.applyOrElse(DAGScheduler.scala:1207)
+	at akka.actor.ActorCell.receiveMessage(ActorCell.scala:498)
+	at akka.actor.ActorCell.invoke(ActorCell.scala:456)
+	at akka.dispatch.Mailbox.processMailbox(Mailbox.scala:237)
+	at akka.dispatch.Mailbox.run(Mailbox.scala:219)
+	at akka.dispatch.ForkJoinExecutorConfigurator$AkkaForkJoinTask.exec(AbstractDispatcher.scala:386)
+	at scala.concurrent.forkjoin.ForkJoinTask.doExec(ForkJoinTask.java:260)
+	at scala.concurrent.forkjoin.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:1339)
+	at scala.concurrent.forkjoin.ForkJoinPool.runWorker(ForkJoinPool.java:1979)
+	at scala.concurrent.forkjoin.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:107)
 [0m[[0mdebug[0m] [0m	Thread run-main exited.[0m
 [0m[[0mdebug[0m] [0mInterrupting remaining threads (should be all daemons).[0m
 [0m[[0mdebug[0m] [0mSandboxed run complete..[0m
-[0m[[0mdebug[0m] [0mExited with code 0[0m
+java.lang.RuntimeException: Nonzero exit code: 1
+	at scala.sys.package$.error(package.scala:27)
+	at sbt.BuildCommon$$anonfun$toError$1.apply(Defaults.scala:1628)
+	at sbt.BuildCommon$$anonfun$toError$1.apply(Defaults.scala:1628)
+	at scala.Option.foreach(Option.scala:236)
+	at sbt.BuildCommon$class.toError(Defaults.scala:1628)
+	at sbt.Defaults$.toError(Defaults.scala:34)
+	at sbt.Defaults$$anonfun$runTask$1$$anonfun$apply$36$$anonfun$apply$37.apply(Defaults.scala:647)
+	at sbt.Defaults$$anonfun$runTask$1$$anonfun$apply$36$$anonfun$apply$37.apply(Defaults.scala:645)
+	at scala.Function1$$anonfun$compose$1.apply(Function1.scala:47)
+	at sbt.$tilde$greater$$anonfun$$u2219$1.apply(TypeFunctions.scala:42)
+	at sbt.std.Transform$$anon$4.work(System.scala:64)
+	at sbt.Execute$$anonfun$submit$1$$anonfun$apply$1.apply(Execute.scala:237)
+	at sbt.Execute$$anonfun$submit$1$$anonfun$apply$1.apply(Execute.scala:237)
+	at sbt.ErrorHandling$.wideConvert(ErrorHandling.scala:18)
+	at sbt.Execute.work(Execute.scala:244)
+	at sbt.Execute$$anonfun$submit$1.apply(Execute.scala:237)
+	at sbt.Execute$$anonfun$submit$1.apply(Execute.scala:237)
+	at sbt.ConcurrentRestrictions$$anon$4$$anonfun$1.apply(ConcurrentRestrictions.scala:160)
+	at sbt.CompletionService$$anon$2.call(CompletionService.scala:30)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:744)
+[0m[[31merror[0m] [0m(compile:[31mrun[0m) Nonzero exit code: 1[0m
