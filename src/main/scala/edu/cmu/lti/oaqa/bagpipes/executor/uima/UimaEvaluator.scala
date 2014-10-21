@@ -11,7 +11,7 @@ import edu.cmu.lti.oaqa.bagpipes.annotation._
 import scala.math._
 import UimaEvaluator._
 import edu.cmu.lti.oaqa.bagpipes.db.BagpipesDatabase.Metric
-class UimaEvaluator[T](evalDesc: EvaluatorDescriptor) extends UimaComponent(evalDesc) with Evaluator[JCas, T] {
+class UimaEvaluator[T](evalDesc: EvaluatorDescriptor) extends UimaComponent(evalDesc) with Evaluator[JCas, T] with java.io.Serializable{
   val EvaluatorDescriptor(_, dParams) = evalDesc
   def executeComponent(input: Result[JCas]): Result[JCas] = {
     val result = input

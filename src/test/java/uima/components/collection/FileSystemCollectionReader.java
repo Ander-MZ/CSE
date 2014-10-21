@@ -21,7 +21,9 @@ package uima.components.collection;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
+
 import org.apache.uima.UimaContext;
 import org.apache.uima.collection.CollectionException;
 import org.apache.uima.fit.component.JCasCollectionReader_ImplBase;
@@ -31,6 +33,8 @@ import org.apache.uima.resource.ResourceInitializationException;
 import org.apache.uima.util.FileUtils;
 import org.apache.uima.util.Progress;
 import org.apache.uima.util.ProgressImpl;
+
+import scala.reflect.runtime.JavaMirrors.JavaClassCompleter;
 import types.SourceDocumentInformation;
 
 /**
@@ -44,7 +48,7 @@ import types.SourceDocumentInformation;
  * 
  * 
  */
-public class FileSystemCollectionReader extends JCasCollectionReader_ImplBase {
+public class FileSystemCollectionReader extends JCasCollectionReader_ImplBase implements Serializable{
 	/**
 	 * Name of configuration parameter that must be set to the path of a
 	 * directory containing input files.

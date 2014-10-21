@@ -16,7 +16,7 @@ import edu.cmu.lti.oaqa.bagpipes.executor.Result
  *      the CollectionReader.
  * @author Collin McCormack, and Avner Maiberg (amaiberg@cs.cmu.edu)
  */
-final class UimaReader(readerDesc: CollectionReaderDescriptor) extends UimaComponent(readerDesc) with Reader[JCas] {
+final class UimaReader(readerDesc: CollectionReaderDescriptor) extends UimaComponent(readerDesc) with Reader[JCas] with java.io.Serializable {
   //import UimaComponent.flattenParams
 
   // Create the Collection Reader internally

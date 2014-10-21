@@ -16,12 +16,13 @@ import edu.cmu.lti.oaqa.bagpipes.annotation.SimpleAnalytic
  * @param C
  * 		ExecutableComponent parent type
  */
-trait Executor[I, C <: ExecutableComponent[I]] extends ExecutorTypes[I, C] {
+trait Executor[I, C <: ExecutableComponent[I]] extends ExecutorTypes[I, C] with java.io.Serializable{
 
   protected val componentFactory: ComponentFactory[I, C]
 
   def getFirstInput: Result[I]
   final def getEmptyCache(input: Int) = Cache(Map(Trace(input, Stream()) -> getFirstInput), Map())
+  final def getEmptyCache = Cache(Map(), Map())
   final def getComponentFactory = componentFactory
   /**
    * Use a component C, to process an input I, specified by the trace.

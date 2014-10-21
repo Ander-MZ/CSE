@@ -26,18 +26,18 @@ import java.sql.Timestamp
 import java.sql.Blob
 import javax.sql.rowset.serial.SerialBlob
 import scala.util.Random
+import edu.cmu.lti.oaqa.bagpipes.executor.ExecutorTypes
 
 /*
  * 
  * @author: Ander Murillo (ander.murillo@itam.mx)
  */
 
-object ParallelExecutorController extends java.io.Serializable {
+class ParallelExecutorController[I, C <: ExecutableComponent[I]] extends java.io.Serializable  with ExecutorTypes[I,C]{
 
   def apply[I](confSpaceStream: List[TreeWithHistory[AtomicExecutableConf]], exctr: Executor[I, _ <: ExecutableComponent[I]], confSpace: Root[CollectionReaderDescriptor, AtomicExecutableConf])(implicit scorer: Scorer[I] = DefaultScorer[I]) = {
 
-    import ParallelExecutorController._
-
+//    import ParallelExecutorController._
     def initializeCollectionReader(confRoot: Root[CollectionReaderDescriptor, AtomicExecutableConf]) = {
       val collectionReaderDesc = confRoot.getRoot
       exctr.getComponentFactory.createReader(collectionReaderDesc)
@@ -66,6 +66,17 @@ object ParallelExecutorController extends java.io.Serializable {
       type DBTrace = BagpipesDatabase.Trace
       
       //An implicit object for the accumulator variable
+<<<<<<< HEAD
+=======
+      
+      
+      implicit object CacheACC extends AccumulatorParam[Cache]{
+        def zero(c: Cache) : Cache = getEmptyCache
+        def addInPlace(c1: Cache, c2: Cache) = c1 ++ c2
+      }
+      
+      //An implicit object for the accumulator variable
+>>>>>>> 3133809ca16a41293907fa925ffc23c237f3422a
       implicit object SetACC extends AccumulatorParam[Set[DBTrace]]{
         def zero(s: Set[DBTrace]) = Set[DBTrace]()
         def addInPlace(s1: Set[DBTrace], s2: Set[DBTrace]) = s1 ++ s2
@@ -73,11 +84,16 @@ object ParallelExecutorController extends java.io.Serializable {
       
       //Accumulator of traces, collects in parallel, stores in DB in master at the end.
       val tracesAcc = sc.accumulator(Set[DBTrace]())
+      val cacheAcc = sc.accumulator(getEmptyCache)
 
       println("----------> Spark Context Created\n\n")    
 
       //Database creation and some auxiliary methods
+<<<<<<< HEAD
       val db = new SqliteDB("jdbc:sqlite:traces.db")
+=======
+      val db = new SqliteDB("jdbc:sqlite:database.db")
+>>>>>>> 3133809ca16a41293907fa925ffc23c237f3422a
 
       db.createTables
       db.insertExperiment(Experiment("UUID: " + System.currentTimeMillis, "bagpipes1", "AUTHOR", "CONFIG", Some("NOTES"), ts)) // ATTENTION: HARDCODED
@@ -104,20 +120,21 @@ object ParallelExecutorController extends java.io.Serializable {
           result
       }
 
-      type ExecutionResult = (Result[_], exctr.Cache)
+      type ExecutionResult = (Result[_], Cache)
       type ExecutionInput = (List[TreeWithHistory[AtomicExecutableConf]], Int) // (ConfSpace, Input #)
 
       /*
      * A base, empty container for results that will be updated throughout the execution
      */
-      def getBlankResult(inputNum: Int)(implicit cache: exctr.Cache = exctr.getEmptyCache(inputNum)) =
-        (exctr.getFirstInput, cache ++ exctr.getEmptyCache(inputNum))
+      def getBlankResult(inputNum: Int)(implicit cache: Cache = getEmptyCache) =
+        (exctr.getFirstInput, cache ++ getEmptyCache)
 
       /*
      * This method receives an ExecutionInput (a tuple containing a configuration space
      * and an input number) and returns an ExecutionResult (a tuple containing the
      * result of executing the space and its cache). 
      */
+<<<<<<< HEAD
       def execStreamPar(execInput: ExecutionInput)(implicit cache: ExecutionResult = getBlankResult(execInput._2)): ExecutionResult = (execInput._1, execInput._2, cache) match {
         //Finished all inputs: accumulate executed traces and return final cache 
         case (List(), _, _) => {
@@ -126,10 +143,20 @@ object ParallelExecutorController extends java.io.Serializable {
           tracesAcc += dbTraces
           //dbTraces.map(t => db.insertTrace(t)) //Can't be performed on parallel due DB being a single file
           cache
+=======
+      def execStreamPar(execInput: ExecutionInput)(implicit execResult: ExecutionResult = getBlankResult(execInput._2)): ExecutionResult = (execInput._1, execInput._2, execResult) match {
+        //Finished all inputs: accumulate executed traces and return final cache 
+        case (List(), _, _) => {
+          val traces = execResult._2.dataCache.keySet
+          val dbTraces = traces.map(t => BagpipesDatabase.Trace(t.hashCode, "TRACE", "UUID", getRandomBlob))
+          tracesAcc += dbTraces
+          cacheAcc += execResult._2
+          execResult
+>>>>>>> 3133809ca16a41293907fa925ffc23c237f3422a
         }
         case ((compDesc @ TreeWithHistory(elem, hist)) :: rest, input, (_, cache)) =>
-          val execResult = execute(compDesc, input)(cache)
-          execStreamPar((rest, input))(execResult)
+          val partialResult = execute(compDesc, input)(execResult)
+          execStreamPar((rest, input))(partialResult)
       }
 
       println("\nTree schema: " + confSpaceStream.toList.map(e => e.getClass().toString().split('.').last) + "\n")
@@ -144,11 +171,11 @@ object ParallelExecutorController extends java.io.Serializable {
 
       println("\n\nresults: " + results.count)
       
-      println("\n\n----------> Start of ACC: " +  tracesAcc.value.size +" traces\n" + tracesAcc.value + "\n----------> End of ACC\n\n")
+      println("\n\n----------> Start of cache ACC: \n" + tracesAcc.value + "\n----------> End of cache ACC\n\n")
       
       println("\n\n----------> Saving traces into DB")
       
-      tracesAcc.value.map(t => db.insertTrace(t))
+      //tracesAcc.value.map(t => db.insertTrace(t))
       
       println("----------> Traces successfully saved\n\n")
 
