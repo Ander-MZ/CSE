@@ -50,41 +50,39 @@ object ParallelExecutorController extends java.io.Serializable {
      */
       println("----------> Creating Spark Context")
 
-      val masterUrl = "local[4]"
-      val projectName = "Bagpipes"
-      val sparkHome = "/Users/andemurillo/Development/Spark"
-      val jars = (new java.io.File(".").getCanonicalPath) + "/target/scala-2.10/bagpipes_1-0_2.10-0.0.1.jar"
+      val masterUrl = System.getenv("MASTER")
+      val projectName = "bagpipes"
+      val sparkHome = System.getenv("SPARK_HOME")
+      val jars = Array("/root/bagpipes/target/scala-2.10/bagpipes_fat_1.0.jar","/root/bagpipes/target/scala-2.10/bagpipes_1-0_2.10-0.0.1.jar")
 
       val conf = new SparkConf()
         .setMaster(masterUrl)
         .setAppName(projectName)
         .setSparkHome(sparkHome)
-        .setJars(Array(jars))
+        .setJars(jars)
 
       val sc = new SparkContext(conf)
       
       type DBTrace = BagpipesDatabase.Trace
       
+      //An implicit object for the accumulator variable
       implicit object SetACC extends AccumulatorParam[Set[DBTrace]]{
         def zero(s: Set[DBTrace]) = Set[DBTrace]()
         def addInPlace(s1: Set[DBTrace], s2: Set[DBTrace]) = s1 ++ s2
       }
       
+      //Accumulator of traces, collects in parallel, stores in DB in master at the end.
       val tracesAcc = sc.accumulator(Set[DBTrace]())
 
-      println("----------> Spark Context Created\n\n")
+      println("----------> Spark Context Created\n\n")    
 
-      println("----------> Creating Database")
-
-      def ts: Timestamp = new java.sql.Timestamp(System.currentTimeMillis())
-
-      //Database creation
+      //Database creation and some auxiliary methods
       val db = new SqliteDB("jdbc:sqlite:traces.db")
 
       db.createTables
       db.insertExperiment(Experiment("UUID: " + System.currentTimeMillis, "bagpipes1", "AUTHOR", "CONFIG", Some("NOTES"), ts)) // ATTENTION: HARDCODED
-
-      println("----------> Database Created\n\n")
+      
+      def ts: Timestamp = new java.sql.Timestamp(System.currentTimeMillis())
       
       def getRandomBlob(): Blob = {
         val b = Array[Byte](10)
@@ -121,28 +119,27 @@ object ParallelExecutorController extends java.io.Serializable {
      * result of executing the space and its cache). 
      */
       def execStreamPar(execInput: ExecutionInput)(implicit cache: ExecutionResult = getBlankResult(execInput._2)): ExecutionResult = (execInput._1, execInput._2, cache) match {
-        //Finished all inputs return final cache
+        //Finished all inputs: accumulate executed traces and return final cache 
         case (List(), _, _) => {
-          println("\n******")
           val traces = cache._2.dataCache.keySet
           val dbTraces = traces.map(t => BagpipesDatabase.Trace(t.hashCode, "TRACE", "UUID", getRandomBlob))
           tracesAcc += dbTraces
-          //dbTraces.map(t => db.insertTrace(t))
-          println("******\n")
+          //dbTraces.map(t => db.insertTrace(t)) //Can't be performed on parallel due DB being a single file
           cache
         }
-
         case ((compDesc @ TreeWithHistory(elem, hist)) :: rest, input, (_, cache)) =>
           val execResult = execute(compDesc, input)(cache)
           execStreamPar((rest, input))(execResult)
       }
 
-      println("\nComponents: " + confSpaceStream.toList.map(e => e.getClass().toString().split('.').last) + "\n")
+      println("\nTree schema: " + confSpaceStream.toList.map(e => e.getClass().toString().split('.').last) + "\n")
 
+      //Configuration space is cloned for each input
       val space = (1 to totalInputs).map((confSpaceStream, _))
 
       val parallelSpace = sc.parallelize(space)
 
+      //Parallel mapping/exploration of the space
       val results = parallelSpace.map(execStreamPar(_))
 
       println("\n\nresults: " + results.count)
@@ -153,7 +150,7 @@ object ParallelExecutorController extends java.io.Serializable {
       
       tracesAcc.value.map(t => db.insertTrace(t))
       
-      println("\n\n----------> Traces successfully saved\n\n")
+      println("----------> Traces successfully saved\n\n")
 
       sc.stop
 
